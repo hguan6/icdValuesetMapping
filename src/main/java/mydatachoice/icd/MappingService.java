@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -117,34 +114,36 @@ public class MappingService {
 
         valueset.remove("D69.2");
         valueset.remove("Z79.899");
-        for(String code : valueset){
-            if(code.substring(0,1) == "T") {
-                valueset.remove(code);
+        Iterator<String> itr = valueset.iterator();
+        while(itr.hasNext()){
+            String code = itr.next();
+            if(code.substring(0,1).equals("T")) {
+                itr.remove();
             }
         }
         completeValueset.addAll(valueset);
 
         for(String code : icd10cm){
 
-            if(code.length() >=7 && code.substring(0,7) == "T50.996"){
+            if(code.length() >=7 && code.substring(0,7).equals("T50.996")){
                 completeValueset.add(code);
                 continue;
             }
-            else if(code.length() >=6 && code.substring(0,6) == "T14.91"){
+            else if(code.length() >=6 && code.substring(0,6).equals("T14.91")){
                 completeValueset.add(code);
                 continue;
             }
             else if(code.length() >= 5) {
                 String str0 = code.substring(0, 5);
-                if (code.length() >= 5 && (str0 == "G47.0" || str0 == "G47.1" || str0 == "G47.4" || str0 == "G47.6" ||
-                        str0 == "G47.8" || str0 == "G47.9" || str0 == "N94.1" || str0 == "N94.8" || str0 == "N94.9")) {
+                if (code.length() >= 5 && ( str0.equals("G47.0") || str0.equals("G47.1") || str0.equals("G47.4") || str0.equals("G47.6") ||
+                        str0.equals("G47.8") || str0.equals("G47.9") || str0.equals("N94.1") || str0.equals("N94.8") || str0.equals("N94.9"))) {
                     completeValueset.add(code);
                     continue;
                 }
             }
             else {
                 String str1 = code.substring(0, 3);
-                if (str1 == "K70" || str1 == "T51" || str1 == "T74" || str1 == "T76") {
+                if (str1.equals("K70") || str1.equals("T51") || str1.equals("T74") || str1.equals("T76")) {
                     completeValueset.add(code);
                 }
             }
