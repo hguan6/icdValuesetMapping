@@ -31,7 +31,12 @@ public class ICD10Service{
         try(BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
             while ((line = br.readLine()) != null){
                 String[] strings = line.split(splitby);
-                String code = strings[0].substring(0,3) + "." + strings[0].substring(3);
+                String code = null;
+                if(strings[0].length() > 3){
+                    code = strings[0].substring(0,3) + "." + strings[0].substring(3);
+                } else {
+                    code = strings[0].substring(0,3);
+                }
                 StringBuilder description = new StringBuilder();
                 for(int i = 1; i < strings.length; i++){
                     description.append(strings[i]);

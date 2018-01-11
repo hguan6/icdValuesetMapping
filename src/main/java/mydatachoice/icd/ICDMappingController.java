@@ -72,6 +72,6 @@ public class ICDMappingController {
 
 
 
-    @RequestMapping(value = "/valueset", method = RequestMethod.GET)
+    @RequestMapping(value = "/valueset/origin", method = RequestMethod.GET)
     public Set<String> getValueSet() { return new TreeSet<String>(this.valueset); }
 }
