@@ -20,7 +20,7 @@ public class ICDMappingController {
     private Model model;
     private Set<String> valueset;
     private Set<String> icd10set;
-    private Map icd10map;
+    private Map<String, String> icd10map;
 
     @Autowired
     public ICDMappingController(MappingService mappingService, ValuesetService valuesetService, ICD10Service icd10Service){
@@ -34,12 +34,12 @@ public class ICDMappingController {
 
         this.valueset = valuesetService.loadValueset();
         this.icd10map = icd10Service.loadICD10CMasMap();
-        this.icd10set = icd10map.keySet();
+//        this.icd10set = icd10map.keySet();
     }
 
     @RequestMapping(value = "/compare", method = RequestMethod.GET)
     public List<Set<String>> compareCompleteValueSet(){
-        return mappingService.compareCompleteValueset(model, valueset, icd10set);
+        return mappingService.compareCompleteValueset(model, valueset, icd10map);
     }
 
     @RequestMapping(value = "/relationship/complete", method = RequestMethod.GET)
@@ -55,7 +55,7 @@ public class ICDMappingController {
 
     @RequestMapping(value = "/valueset/rules/code", method = RequestMethod.GET)
     public Set<String> getValuesetByRules(){
-        return new TreeSet<String>(mappingService.getCompleteValuesetByRules(icd10set));
+        return new TreeSet<String>(mappingService.getCompleteValuesetWithDescriptionByRules(icd10map).keySet());
     }
 
     @RequestMapping(value = "/valueset/rules/full", method = RequestMethod.GET)

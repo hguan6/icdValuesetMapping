@@ -23,24 +23,17 @@ public class ICD10Service{
     public Map loadICD10CMasMap(){
         Map icd10cm = new HashMap();
 
-        String filepath = "classpath:dataset/icd10cm_codes_2018.txt";
+        String filepath = "classpath:dataset/icd10cm_order_2018.txt";
         String line = "";
-        String splitby = "\\s+";
+//        String splitby = "\\s+";
 
         Resource resource = resourceLoader.getResource(filepath);
         try(BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
             while ((line = br.readLine()) != null){
-                String[] strings = line.split(splitby);
-                String code = null;
-                if(strings[0].length() > 3){
-                    code = strings[0].substring(0,3) + "." + strings[0].substring(3);
-                } else {
-                    code = strings[0].substring(0,3);
-                }
-                StringBuilder description = new StringBuilder();
-                for(int i = 1; i < strings.length; i++){
-                    description.append(strings[i]);
-                    description.append(" ");
+                String code = line.substring(6,13).trim();
+                String description = line.substring(77).trim();
+                if(code.length() > 3){
+                    code = code.substring(0,3) + "." + code.substring(3);
                 }
                 icd10cm.put(code,description);
             }
