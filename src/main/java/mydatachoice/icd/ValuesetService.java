@@ -38,26 +38,4 @@ public class ValuesetService {
         }
         return valueset;
     }
-
-    public List<String> getSensitiveCategory(){
-        List<String> sensCategory = new ArrayList<>();
-        String filepath = "classpath:dataset/valueset.csv";
-        String line = "";
-        String cvsSplitby = ",";
-
-        Resource resource = resourceLoader.getResource(filepath);
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
-            while ((line = br.readLine()) != null){
-                String[] strings = line.split(cvsSplitby);
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return sensCategory;
-    }
-
-
 }

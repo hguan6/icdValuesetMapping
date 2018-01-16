@@ -115,19 +115,60 @@ public class MappingService {
                 .filter(map -> map.getKey().matches(pattern))
                 .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
 
-//        Map<String, String> completeValueset = new Map<>();
-//        Iterator<String> itr = icd10cm.keySet().iterator();
-//        while(itr.hasNext()){
-//            String code = itr.next();
-//            if (code.matches(pattern)){ completeValueset.put(code, icd10cm.get(code)); }
-//        }
-//
-//        String exceptionPattern = "^(F13|F28|F51.11|F64.0|F80.82|G47.2|G47.3|G47.5|T50.996)\\S*";
-//        itr = completeValueset.keySet().iterator();
-//        while(itr.hasNext()){
-//            String code = itr.next();
-//            if(code.matches(exceptionPattern)){ itr.remove(); }
-//        }
+        String exceptionPattern = "^(F13|F28|F51.11|F64.0|F80.82|G47.2|G47.3|G47.5|T50.996)\\S*";
+        completeValueset.keySet().removeIf(key -> key.matches(exceptionPattern));
         return completeValueset;
+    }
+    /*
+        This method gets sensitive category of a code if the code is sensitive
+     */
+    public String getSensitiveCategory(String code, Map<String, String> vsByRules){
+        
+        if(vsByRules.containsKey(code)){
+            Set<String> sensCategories = new HashSet<>();
+            if(code.matches("^((F06|G47|R37|T14|T74|T76)|((F2|F3|F4|F5|F6|F7|F8|F9)[0-9])|(N[0-9][0-9]))(\\.[0-9]+)?$")) {
+                sensCategories.add("C2S Mental Health Disorders");
+            }
+            if(code.matches("^(((F10|K70|T51)(\\.[0-9]+)?))|((P04.3|P04.9|R23.2)[0-9]*)$")) {
+                sensCategories.add("C2S Alcohol Use Disorders");
+            }
+            if(code.matches("^F11(\\.[0-9]+)?$")) {
+                sensCategories.add("C2S Opioids");
+            }
+            if(code.matches("^F12(\\.[0-9]+)?$")){
+                sensCategories.add("C2S Cannabis Use Disorders");
+            }
+            if(code.matches("^((F14|T50|T40)(\\.[0-9]+)?)|((P04.4|P04.9|P93.8|R78.2)[0-9]*)$")){
+                sensCategories.add("C2S Cocaine Use Disorder");
+            }
+            if(code.matches("^F15(\\.[0-9]+)?$")){
+                sensCategories.add("C2S Amphetamine Use Disorders");
+            }
+            if(code.matches("^(F16|T40)(\\.[0-9]+)?$")){
+                sensCategories.add("C2S Hallucinogens");
+            }
+            if(code.matches("^F17(\\.[0-9]+)?$")){
+                sensCategories.add("C2S Tobacco Use Disorders");
+            }
+            if(code.matches("^(F18(\\.[0-9]+)?)|((F17.200|F19.20|F19.21)[0-9]*)$")){
+                sensCategories.add("C2S Inhalants");
+            }
+            if(code.matches("^F19(\\.[0-9]+)?$")){
+                sensCategories.add("C2S Other Psychoactive Substance Use Disorder");
+                sensCategories.add("C2S Sedative Hypnotic, or anxiolytic related disorders");
+            }
+            if(code.matches("^K20(\\.[0-9]+)?$")){
+                sensCategories.add("Unknown");
+            }
+            StringBuilder result = new StringBuilder();
+            for(String sensCategory : sensCategories){
+                result.append(sensCategory);
+                result.append(" & ");
+            }
+            return result.delete(result.length() - 3, result.length()).toString();
+        } else{
+            return "The code is insensitive or it does not exist.";
+        }
+
     }
 }
