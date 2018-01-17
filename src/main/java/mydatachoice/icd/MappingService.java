@@ -122,8 +122,8 @@ public class MappingService {
     /*
         This method gets sensitive category of a code if the code is sensitive
      */
-    public String getSensitiveCategory(String code, Map<String, String> vsByRules){
-        
+    public Set<String> getSensitiveCategory(String code, Map<String, String> vsByRules){
+
         if(vsByRules.containsKey(code)){
             Set<String> sensCategories = new HashSet<>();
             if(code.matches("^((F06|G47|R37|T14|T74|T76)|((F2|F3|F4|F5|F6|F7|F8|F9)[0-9])|(N[0-9][0-9]))(\\.[0-9]+)?$")) {
@@ -160,14 +160,9 @@ public class MappingService {
             if(code.matches("^K20(\\.[0-9]+)?$")){
                 sensCategories.add("Unknown");
             }
-            StringBuilder result = new StringBuilder();
-            for(String sensCategory : sensCategories){
-                result.append(sensCategory);
-                result.append(" & ");
-            }
-            return result.delete(result.length() - 3, result.length()).toString();
+            return sensCategories;
         } else{
-            return "The code is insensitive or it does not exist.";
+            return null;
         }
 
     }

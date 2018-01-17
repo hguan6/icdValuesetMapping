@@ -17,8 +17,8 @@ public class ICDMappingController {
     private ValuesetService valuesetService;
     private ICD10Service icd10Service;
 
-//    private Model model;
-//    private Set<String> originalValueset;
+    private Model model;
+    private Set<String> originalValueset;
     private Map<String, String> icd10map;
 
     private Map<String, String> vsByRules;
@@ -29,30 +29,30 @@ public class ICDMappingController {
         this.valuesetService = valuesetService;
         this.icd10Service = icd10Service;
 
-//        this.model = ModelFactory.createDefaultModel();
-//        model.read("dataset/ICD10CM.ttl");
-//        System.out.println("loadModel success");
-//
-//        this.originalValueset = valuesetService.loadValueset();
+        this.model = ModelFactory.createDefaultModel();
+        model.read("dataset/ICD10CM.ttl");
+        System.out.println("loadModel success");
+
+        this.originalValueset = valuesetService.loadValueset();
         this.icd10map = icd10Service.loadICD10CMasMap();
 
         this.vsByRules = mappingService.getCompleteValuesetWithDescriptionByRules(icd10map);
     }
 
-//    @RequestMapping(value = "/compare", method = RequestMethod.GET)
-//    public List<Set<String>> compareCompleteValueSet(){
-//        return mappingService.compareCompleteValueset(model, originalValueset, icd10map);
-//    }
-//
-//    @RequestMapping(value = "/valueset/relationship/complete", method = RequestMethod.GET)
-//    public Set<String> getCompleteValuesetByRelation(){
-//        return mappingService.getCompleteValuesetByRelation(model, originalValueset);
-//    }
-//
-//    @RequestMapping(value = "/valueset/relationship/subclasses/{code}", method = RequestMethod.GET)
-//    public Set<String> getSubclassesByRelationship(@PathVariable String code){
-//        return mappingService.getSubclassesByRelation(model, code);
-//    }
+    @RequestMapping(value = "/compare", method = RequestMethod.GET)
+    public List<Set<String>> compareCompleteValueSet(){
+        return mappingService.compareCompleteValueset(model, originalValueset, icd10map);
+    }
+
+    @RequestMapping(value = "/valueset/relationship/complete", method = RequestMethod.GET)
+    public Set<String> getCompleteValuesetByRelation(){
+        return mappingService.getCompleteValuesetByRelation(model, originalValueset);
+    }
+
+    @RequestMapping(value = "/valueset/relationship/subclasses/{code}", method = RequestMethod.GET)
+    public Set<String> getSubclassesByRelationship(@PathVariable String code){
+        return mappingService.getSubclassesByRelation(model, code);
+    }
 
 
     @RequestMapping(value = "/valueset/rules/code", method = RequestMethod.GET)
@@ -71,10 +71,10 @@ public class ICDMappingController {
     @RequestMapping(value = "/allICD10/full", method = RequestMethod.GET)
     public Map<String, String> getAllIcd10full() { return new TreeMap(this.icd10map); }
 
-//
-//    @RequestMapping(value = "/valueset/origin", method = RequestMethod.GET)
-//    public Set<String> getValueSet() { return new TreeSet<String>(this.originalValueset); }
+
+    @RequestMapping(value = "/valueset/origin", method = RequestMethod.GET)
+    public Set<String> getValueSet() { return new TreeSet<String>(this.originalValueset); }
 
     @RequestMapping(value = "/sensCategory/{code:.+}", method = RequestMethod.GET)
-    public String getSensitiveCategory(@PathVariable String code) { return mappingService.getSensitiveCategory(code, vsByRules); }
+    public Set<String> getSensitiveCategory(@PathVariable String code) { return mappingService.getSensitiveCategory(code, vsByRules); }
 }
